@@ -43,6 +43,12 @@ int open_database() {
         return ERR_LMDB;
     }
 
+    err = mdb_env_set_mapsize(env, 1024 * 1024 * 1024);
+    if (err != 0) {
+        printf("Error while setting map size!\n");
+        return ERR_LMDB;
+    }
+
     err = mdb_env_open(env, ".", 0, 0644);
     if (err != 0) {
         printf("Could not open env %d\n", err);
@@ -95,7 +101,8 @@ int main()
 char *input;
 input = calloc('0', 255);
 printf("Commands to use:\nw1k (write 1024 bytes)\nw2k (write 2048 bytes)"
-       "\nw512k (write 512 * 1024 bytes)\nc commit)\ne (exit)\n");
+       "\nw512k (write 512 * 1024 bytes)\nw50m (write 50 MB)\nc commit)\ne "
+       "(exit)\n");
 
 open_database();
 printf("$");
@@ -111,13 +118,16 @@ printf("$");
             printf("w2k\n");
         } else if (0 == strcmp(input, "w512k")) {
             write_to_database(1024*512);
-            printf("w1m\n");
+            printf("w512k\n");
+        } else if (0 == strcmp(input, "w50m")) {
+            write_to_database(1024*1024*50);
+            printf("w512k\n");
         } else if (0 == strcmp(input, "c")) {
             printf("commit\n");
             if (txn) {
                 mdb_txn_commit(txn);
             }
-        } else if (0 == strcmp(input, "e")) {
+        } else if ((0 == strcmp(input, "e")) || (0 == strcmp(input, "q"))) {
             break;
         }
         printf("$");
