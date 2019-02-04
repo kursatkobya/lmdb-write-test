@@ -72,7 +72,7 @@ int open_database() {
     return 0;
 }
 
-int write_to_database(int value_size)
+int write_to_database(int value_size, int verbose)
 {
     MDB_val _key, _val;
     char *key = calloc('0', KEY_SIZE);
@@ -86,9 +86,12 @@ int write_to_database(int value_size)
     _val.mv_data = (void *) val;
     _val.mv_size = value_size;
 
-    printf("setting the key : %s\n to value :\n%s\n", key, val);
+    if (verbose) printf("setting the key : %s\n to value :\n%s\n", key, val);
 
     int err = mdb_put(txn, dbi, &_key, &_val, 0);
+
+    free(key); free(val);
+
     if (err != 0) {
         printf("Failed to write db : key %s! %d\n", key, err);
         return ERR_LMDB;
@@ -106,22 +109,19 @@ printf("Commands to use:\nw1k (write 1024 bytes)\nw2k (write 2048 bytes)"
 
 open_database();
 printf("$");
-
+int false = 0, true = 1;
     while(fgets(input, 255, stdin)) {
         input[strlen(input) - 1] = '\0';
 
         if (0 == strcmp(input, "w1k")) {
-            write_to_database(1024);
-            printf("w1k!\n");
+            write_to_database(1024, true);
         } else if (0 == strcmp(input, "w2k")) {
-            write_to_database(1024);
-            printf("w2k\n");
+            write_to_database(1024, true);
         } else if (0 == strcmp(input, "w512k")) {
-            write_to_database(1024*512);
-            printf("w512k\n");
+            write_to_database(1024*512, true);
         } else if (0 == strcmp(input, "w50m")) {
-            write_to_database(1024*1024*50);
-            printf("w512k\n");
+            write_to_database(1024*1024*50, false);
+            printf("50 MB written\n");
         } else if (0 == strcmp(input, "c")) {
             printf("commit\n");
             if (txn) {
@@ -129,6 +129,10 @@ printf("$");
             }
         } else if ((0 == strcmp(input, "e")) || (0 == strcmp(input, "q"))) {
             break;
+        } else {
+            printf("Commands to use:\nw1k (write 1024 bytes)\nw2k (write 2048 bytes)"
+                   "\nw512k (write 512 * 1024 bytes)\nw50m (write 50 MB)\nc commit)\ne "
+                   "(exit)\n");
         }
         printf("$");
     }

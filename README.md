@@ -9,11 +9,12 @@ cmake .. & make
 ./lmdb_write_test
 
 # Commands
-w1k   : write random 1024 bytes string value to a random 16byte key
-w2k   : write random 2048 bytes
-w512k : write random 512 Kbytes
-c     : commit key/value pairs to database
-e     : exit program
+* w1k   : write random 1024 bytes string value to a random 16byte key
+* w2k   : write random 2048 bytes
+* w512k : write random 512 Kbytes
+* w50m  : write random 50 MB
+* c     : commit key/value pairs to database
+* e     : exit program
 
 # Test
 * Run the program.
@@ -22,4 +23,4 @@ e     : exit program
 * Set random values using commands on the program and meanwhile observe strace
   to ensure no data sync happens.
 * Commit using `c` command on the program and meanwhile observe strace to
-* ensure data sync happens
+  ensure data sync happens
