@@ -14,6 +14,7 @@ cmake .. & make
 * w512k : write random 512 Kbytes
 * w50m  : write random 50 MB
 * c     : commit key/value pairs to database
+* r     : read the value of the last key
 * e     : exit program
 
 # Test
