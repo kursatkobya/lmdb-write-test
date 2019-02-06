@@ -3,19 +3,23 @@ A IO write test utility for lmdb[http://www.lmdb.tech/doc] database.
 The program opens a default database on startup and add random data regarding
 giving commands.
 
+# Dependencies
+* liblmdb
+
 # Build
 mkdir build && cd build
 cmake .. & make
 ./lmdb_write_test
 
 # Commands
-* w1k   : write random 1024 bytes string value to a random 16byte key
-* w2k   : write random 2048 bytes
-* w512k : write random 512 Kbytes
-* w50m  : write random 50 MB
-* c     : commit key/value pairs to database
-* r     : read the value of the last key
-* e     : exit program
+* w1k    : write random 1024 bytes string value to a random 16byte key
+* w2k    : write random 2048 bytes
+* w512k  : write random 512 Kbytes
+* w50m   : write random 50 MB
+* c      : commit key/value pairs to database
+* r      : read the value of the last key
+* r [key}: read the value of the last key
+* e      : exit program
 
 # Test
 * Run the program.

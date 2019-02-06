@@ -78,9 +78,8 @@ int write_to_database(int value_size, int verbose)
 {
     MDB_val _key, _val;
     char *key = calloc('0', KEY_SIZE);
-    rand_string(key, KEY_SIZE-1);
+    rand_string(key, KEY_SIZE - 1);
     strncpy(last_key, key, KEY_SIZE);
-    printf("last key is %s\n", last_key);
 
     char *val= calloc('0', value_size);
     rand_string(val, value_size-1);
@@ -141,9 +140,9 @@ int false = 0, true = 1;
         } else if (0 == strcmp(input, "w2k")) {
             write_to_database(1024, true);
         } else if (0 == strcmp(input, "w512k")) {
-            write_to_database(1024*512, true);
+            write_to_database(1024 * 512, false);
         } else if (0 == strcmp(input, "w50m")) {
-            write_to_database(1024*1024*50, false);
+            write_to_database(1024 * 1024 * 50, false);
             printf("50 MB written\n");
         } else if (0 == strcmp(input, "c")) {
             printf("commit\n");
@@ -153,6 +152,8 @@ int false = 0, true = 1;
             open_database();
         } else if (0 == strcmp(input, "r")) {
             read_value(last_key);
+        } else if ('r' == input[0] && ' ' == input[1]) {
+            read_value(input+2);
         } else if ((0 == strcmp(input, "e")) || (0 == strcmp(input, "q"))) {
             break;
         } else {
